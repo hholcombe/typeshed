@@ -1,6 +1,7 @@
 # Stubs for subprocess
 
 # Based on http://docs.python.org/3.6/library/subprocess.html
+import os
 import sys
 from typing import Sequence, Any, Mapping, Callable, Tuple, IO, Optional, Union, List, Type, Text
 from types import TracebackType
@@ -26,19 +27,19 @@ if sys.version_info >= (3, 5):
 
     if sys.version_info >= (3, 6):
         # Nearly same args as Popen.__init__ except for timeout, input, and check
-        def run(args: _CMD,
+        def run(args: Union[_CMD, os.PathLike],
                 timeout: Optional[float] = ...,
                 input: Optional[_TXT] = ...,
                 check: bool = ...,
                 bufsize: int = ...,
-                executable: _TXT = ...,
+                executable: Union[_TXT, os.PathLike] = ...,
                 stdin: _FILE = ...,
                 stdout: _FILE = ...,
                 stderr: _FILE = ...,
                 preexec_fn: Callable[[], Any] = ...,
                 close_fds: bool = ...,
                 shell: bool = ...,
-                cwd: Optional[_TXT] = ...,
+                cwd: Optional[Union[_TXT, os.PathLike]] = ...,
                 env: Optional[_ENV] = ...,
                 universal_newlines: bool = ...,
                 startupinfo: Any = ...,
@@ -73,7 +74,27 @@ if sys.version_info >= (3, 5):
                 pass_fds: Any = ...) -> CompletedProcess: ...
 
 # Same args as Popen.__init__
-if sys.version_info >= (3, 3):
+if sys.version_info >= (3, 6):
+    # 3.6 added PathLike
+    def call(args: Union[_CMD, os.PathLike],
+             bufsize: int = ...,
+             executable: Union[_TXT, os.PathLike] = ...,
+             stdin: _FILE = ...,
+             stdout: _FILE = ...,
+             stderr: _FILE = ...,
+             preexec_fn: Callable[[], Any] = ...,
+             close_fds: bool = ...,
+             shell: bool = ...,
+             cwd: Optional[Union[_TXT, os.PathLike]] = ...,
+             env: Optional[_ENV] = ...,
+             universal_newlines: bool = ...,
+             startupinfo: Any = ...,
+             creationflags: int = ...,
+             restore_signals: bool = ...,
+             start_new_session: bool = ...,
+             pass_fds: Any = ...,
+             timeout: float = ...) -> int: ...
+elif sys.version_info >= (3, 3):
     # 3.3 added timeout
     def call(args: _CMD,
              bufsize: int = ...,
@@ -113,7 +134,27 @@ else:
              pass_fds: Any = ...) -> int: ...
 
 # Same args as Popen.__init__
-if sys.version_info >= (3, 3):
+if sys.version_info >= (3, 6):
+    # 3.6 added PathLike
+    def check_call(args: Union[_CMD, os.PathLike],
+                   bufsize: int = ...,
+                   executable: Union[_TXT, os.PathLike] = ...,
+                   stdin: _FILE = ...,
+                   stdout: _FILE = ...,
+                   stderr: _FILE = ...,
+                   preexec_fn: Callable[[], Any] = ...,
+                   close_fds: bool = ...,
+                   shell: bool = ...,
+                   cwd: Optional[Union[_TXT, os.PathLike]] = ...,
+                   env: Optional[_ENV] = ...,
+                   universal_newlines: bool = ...,
+                   startupinfo: Any = ...,
+                   creationflags: int = ...,
+                   restore_signals: bool = ...,
+                   start_new_session: bool = ...,
+                   pass_fds: Any = ...,
+                   timeout: float = ...) -> int: ...
+elif sys.version_info >= (3, 3):
     # 3.3 added timeout
     def check_call(args: _CMD,
                    bufsize: int = ...,
@@ -154,15 +195,15 @@ else:
 
 if sys.version_info >= (3, 6):
     # 3.6 added encoding and errors
-    def check_output(args: _CMD,
+    def check_output(args: Union[_CMD, os.PathLike],
                      bufsize: int = ...,
-                     executable: _TXT = ...,
+                     executable: Union[_TXT, os.PathLike] = ...,
                      stdin: _FILE = ...,
                      stderr: _FILE = ...,
                      preexec_fn: Callable[[], Any] = ...,
                      close_fds: bool = ...,
                      shell: bool = ...,
-                     cwd: Optional[_TXT] = ...,
+                     cwd: Optional[Union[_TXT, os.PathLike]] = ...,
                      env: Optional[_ENV] = ...,
                      universal_newlines: bool = ...,
                      startupinfo: Any = ...,
@@ -265,7 +306,9 @@ class CalledProcessError(Exception):
                  stderr: Optional[_TXT] = ...) -> None: ...
 
 class Popen:
-    if sys.version_info >= (3, 3):
+    if sys.version_info >= (3, 6):
+        args = ...  # type: Union[_CMD, os.PathLike]
+    elif sys.version_info >= (3, 3):
         args = ...  # type: _CMD
     stdin = ...  # type: IO[Any]
     stdout = ...  # type: IO[Any]
@@ -275,16 +318,16 @@ class Popen:
 
     if sys.version_info >= (3, 6):
         def __init__(self,
-                     args: _CMD,
+                     args: Union[_CMD, os.PathLike],
                      bufsize: int = ...,
-                     executable: Optional[_TXT] = ...,
+                     executable: Optional[Union[_TXT, os.PathLike]] = ...,
                      stdin: Optional[_FILE] = ...,
                      stdout: Optional[_FILE] = ...,
                      stderr: Optional[_FILE] = ...,
                      preexec_fn: Optional[Callable[[], Any]] = ...,
                      close_fds: bool = ...,
                      shell: bool = ...,
-                     cwd: Optional[_TXT] = ...,
+                     cwd: Optional[Union[_TXT, os.PathLike]] = ...,
                      env: Optional[_ENV] = ...,
                      universal_newlines: bool = ...,
                      startupinfo: Optional[Any] = ...,
